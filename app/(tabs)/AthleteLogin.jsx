@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
+  Alert,
   Image,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../config/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const AthleteLogin = () => {
   const navigation = useNavigation();
@@ -32,7 +32,7 @@ const AthleteLogin = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>SCDC SMART</Text>
+        <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
       <Text style={styles.title}>Athlete Login</Text>
