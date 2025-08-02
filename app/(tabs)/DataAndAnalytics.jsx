@@ -1,8 +1,8 @@
 // src/components/ShowEnquiry.js
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
-import { db } from '../../config/firebase'; // Adjust the import path according to your project structure
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { db } from '../../config/firebase'; // Adjust the import path according to your project structure
 
 const ShowEnquiry = () => {
     const [enquiries, setEnquiries] = useState([]);
