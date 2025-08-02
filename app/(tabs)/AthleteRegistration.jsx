@@ -26,6 +26,7 @@ const AthleteRegistration = () => {
   const [sport, setSport] = useState('');
   const [additionalSports, setAdditionalSports] = useState('');
   const [userType, setUserType] = useState('Athlete'); // Default user type
+  const [phone, setPhone] = useState(''); // Add phone state
 
   useEffect(() => {
     if (user) {
@@ -33,7 +34,7 @@ const AthleteRegistration = () => {
     }
   }, [user]);
   const handleSubmit = async () => {
-    if (!name || !email || !password || !sport) {
+    if (!name || !email || !password || !sport || !phone) { // Add phone to validation
       Alert.alert('Error', 'Please fill in all required fields.');
       return;
     }
@@ -42,6 +43,7 @@ const AthleteRegistration = () => {
       await setDoc(doc(usersRef, userCredential.user.uid), {
         name,
         email,
+        phone, // Add phone to Firestore document
         sport,
         additionalSports,
         userType,
@@ -101,6 +103,15 @@ const AthleteRegistration = () => {
         placeholderTextColor="#888"
         value={additionalSports}
         onChangeText={setAdditionalSports}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        placeholderTextColor="#888"
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
       />
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>

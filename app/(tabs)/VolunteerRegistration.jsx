@@ -32,6 +32,7 @@ const VolunteerRegistration = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [userType, setUserType] = useState('Volunteer');
+  const [phone, setPhone] = useState(''); // Add phone state
 
   useEffect(() => {
     if (user) {
@@ -72,7 +73,7 @@ const VolunteerRegistration = () => {
 
   const handleSubmit = async () => {
     try {
-      if (!name.trim() || !email.trim() || !password.trim()) {
+      if (!name.trim() || !email.trim() || !password.trim() || !phone.trim()) { // Add phone to validation
         Alert.alert('Validation Error', 'Please fill in all fields.');
         return;
       }
@@ -84,6 +85,7 @@ const VolunteerRegistration = () => {
         uid: user.uid,
         name,
         email,
+        phone, // Add phone to Firestore document
         location,
         startDate: startDate.toISOString(),
         userType,
@@ -132,6 +134,15 @@ const VolunteerRegistration = () => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        placeholderTextColor="#888"
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
       />
 
       <View style={styles.inputWithIcon}>
