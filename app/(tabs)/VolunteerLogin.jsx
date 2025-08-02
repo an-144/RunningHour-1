@@ -17,7 +17,6 @@ const VolunteerLogin = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState(''); // Add phone state
 
   const handleLogin = async () => {
     try {
@@ -45,15 +44,6 @@ const VolunteerLogin = () => {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        placeholderTextColor="#888"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
       />
 
       <TextInput

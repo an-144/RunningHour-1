@@ -106,7 +106,7 @@ const VolunteerRegistration = () => {
         <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
-      <Text style={styles.title}>Volunteer Registration</Text>
+      <Text style={styles.title}>Guide Registration</Text>
 
       <TextInput
         style={styles.input}
