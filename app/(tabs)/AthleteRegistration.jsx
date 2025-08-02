@@ -25,7 +25,6 @@ const AthleteRegistration = () => {
   const [password, setPassword] = useState('');
   const [sport, setSport] = useState('');
   const [additionalSports, setAdditionalSports] = useState('');
-  const [nearestMTR, setNearestMTR] = useState('');
   const [userType, setUserType] = useState('Athlete'); // Default user type
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const AthleteRegistration = () => {
     }
   }, [user]);
   const handleSubmit = async () => {
-    if (!name || !email || !password || !sport || !nearestMTR) {
+    if (!name || !email || !password || !sport) {
       Alert.alert('Error', 'Please fill in all required fields.');
       return;
     }
@@ -45,7 +44,6 @@ const AthleteRegistration = () => {
         email,
         sport,
         additionalSports,
-        nearestMTR,
         userType,
       });
       Alert.alert('Success', 'Registration successful!');
@@ -146,14 +144,6 @@ const AthleteRegistration = () => {
         placeholderTextColor="#888"
         value={additionalSports}
         onChangeText={setAdditionalSports}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Nearest MTR Station"
-        placeholderTextColor="#888"
-        value={nearestMTR}
-        onChangeText={setNearestMTR}
       />
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
