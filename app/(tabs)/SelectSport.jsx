@@ -18,7 +18,7 @@ const SelectSport = () => {
   const openModal = () => setIsModalVisible(true);
   const closeModal = () => setIsModalVisible(false);
 
-  const sports = ['Football', 'Basketball', 'Tennis', 'Cricket'];
+  const sports = ['Stadium Run', 'Yoga', 'Marathon', '10km'];
 
   return (
     <View style={styles.container}>
@@ -28,7 +28,7 @@ const SelectSport = () => {
           source={require('../../assets/images/logo.png')} // Local image
           style={styles.logo}
         />
-        <Text style={styles.title}>Volunteer Learning System</Text>
+        <Text style={styles.title}>Guide Learning System</Text>
       </View>
 
       {/* Button to Open Modal */}

@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useNavigation } from '@react-navigation/native';
+import * as Location from 'expo-location';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import {
-  View,
+  Alert,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
-  Image,
-  ScrollView,
-  Platform,
-  Alert,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import * as Location from 'expo-location';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { auth, usersRef } from '../../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 const VolunteerRegistration = () => {
   const navigation = useNavigation();
@@ -30,7 +30,6 @@ const VolunteerRegistration = () => {
   const [password, setPassword] = useState('');
   const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState(new Date());
-  const [nearestMTR, setNearestMTR] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [userType, setUserType] = useState('Volunteer');
 
@@ -73,7 +72,7 @@ const VolunteerRegistration = () => {
 
   const handleSubmit = async () => {
     try {
-      if (!name.trim() || !email.trim() || !password.trim() || !nearestMTR.trim()) {
+      if (!name.trim() || !email.trim() || !password.trim()) {
         Alert.alert('Validation Error', 'Please fill in all fields.');
         return;
       }
@@ -87,7 +86,6 @@ const VolunteerRegistration = () => {
         email,
         location,
         startDate: startDate.toISOString(),
-        nearestMTR,
         userType,
       };
 
@@ -109,21 +107,6 @@ const VolunteerRegistration = () => {
       </View>
 
       <Text style={styles.title}>Volunteer Registration</Text>
-
-      <Text style={styles.label}>Select User Type:</Text>
-      <View style={styles.userTypeContainer}>
-        {['Volunteer', 'Management', 'Athlete'].map((type) => (
-          <TouchableOpacity
-            key={type}
-            style={[styles.userTypeButton, userType === type && styles.activeButton]}
-            onPress={() => setUserType(type)}
-          >
-            <Text style={[styles.userTypeText, userType === type && styles.activeText]}>
-              {type}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
 
       <TextInput
         style={styles.input}
@@ -186,14 +169,6 @@ const VolunteerRegistration = () => {
           maximumDate={new Date()}
         />
       )}
-
-      <TextInput
-        style={styles.input}
-        placeholder="Nearest MTR Station"
-        placeholderTextColor="#888"
-        value={nearestMTR}
-        onChangeText={setNearestMTR}
-      />
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Submit</Text>

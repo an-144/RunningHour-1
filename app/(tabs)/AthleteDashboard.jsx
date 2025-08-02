@@ -1,11 +1,14 @@
 // src/components/AthleteDashboard.js
 
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react'; // Import useState
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // For icons
 
 const AthleteDashboard = () => {
   const navigation = useNavigation();
+  const [phone, setPhone] = useState(''); // Add this if you fetch phone from backend
+  const userEmail = ''; // Replace with actual user email state or prop
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -15,8 +18,12 @@ const AthleteDashboard = () => {
         <Text style={styles.headerText}>RunningHour</Text>
       </View>
 
+      {/* Optionally, display phone number below the header: */}
+      <Text style={styles.infoText}>Email: {userEmail || 'Not available'}</Text>
+      <Text style={styles.infoText}>Phone: {phone || 'Not available'}</Text>
+
       {/* Title */}
-      <Text style={styles.title}>Athlete Dashboard</Text>
+      <Text style={styles.title}>Guide Dashboard</Text>
 
       {/* Buttons */}
       <View style={styles.buttonContainer}>
@@ -91,6 +98,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#19235E',
     marginLeft: 10, // Space between logo and text
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#19235E',
+    textAlign: 'center',
+    marginBottom: 5,
   },
   title: {
     fontSize: 24,

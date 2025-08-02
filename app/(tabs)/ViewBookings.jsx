@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
 const ViewBookings = () => {
@@ -46,11 +46,14 @@ const ViewBookings = () => {
           ) : (
             bookings.map((booking) => (
               <View key={booking.id} style={styles.card}>
-                <Text style={styles.label}>Volunteer Name:</Text>
+                <Text style={styles.label}>Guide Name:</Text>
                 <Text style={styles.value}>{booking.userName}</Text>
 
                 <Text style={styles.label}>Email:</Text>
                 <Text style={styles.value}>{booking.userEmail}</Text>
+
+                <Text style={styles.label}>Phone Number:</Text>
+                <Text style={styles.value}>{booking.userPhone || 'No phone number'}</Text>
 
                 <Text style={styles.label}>Session Type:</Text>
                 <Text style={styles.value}>{booking.sessionType}</Text>

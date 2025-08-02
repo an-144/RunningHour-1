@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
+  Alert,
   Image,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../config/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const VolunteerLogin = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState(''); // Add phone state
 
   const handleLogin = async () => {
     try {
@@ -32,7 +33,7 @@ const VolunteerLogin = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>SCDC SMART</Text>
+        <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
       <Text style={styles.title}>Volunteer Login</Text>
@@ -44,6 +45,15 @@ const VolunteerLogin = () => {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        placeholderTextColor="#888"
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
       />
 
       <TextInput

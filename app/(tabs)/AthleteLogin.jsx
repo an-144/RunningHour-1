@@ -35,7 +35,7 @@ const AthleteLogin = () => {
         <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
-      <Text style={styles.title}>Athlete Login</Text>
+      <Text style={styles.title}>Buddy Login</Text>
 
       <TextInput
         style={styles.input}

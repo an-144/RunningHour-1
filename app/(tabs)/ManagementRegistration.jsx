@@ -24,6 +24,7 @@ const ManagementRegistration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [sdscteam, setSdscteam] = useState('');
+  const [phone, setPhone] = useState(''); // Add phone state
   const [userType, setUserType] = useState('Management'); // Default user type
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const ManagementRegistration = () => {
   // Form submission handler
   const handleSubmit = async () => {
     try {
-      if (!name.trim() || !email.trim() || !password.trim() || !sdscteam.trim()) {
+      if (!name.trim() || !email.trim() || !password.trim() || !sdscteam.trim() || !phone.trim()) { // Add phone to validation
         Alert.alert('Validation Error', 'Please fill in all fields.');
         return;
       }
@@ -49,8 +50,9 @@ const ManagementRegistration = () => {
         uid: user.uid,
         name,
         email,
+        phone, // Add phone to Firestore document
         sdscteam,
-        userType, // Save user type in Firestore
+        userType,
       };
 
       // Add user data to Firestore
@@ -73,34 +75,6 @@ const ManagementRegistration = () => {
 
       <Text style={styles.title}>Management Registration</Text>
 
-      <Text style={styles.label}>Select User Type:</Text>
-      <View style={styles.userTypeContainer}>
-        <TouchableOpacity
-          style={[styles.userTypeButton, userType === 'Volunteer' && styles.activeButton]}
-          onPress={() => setUserType('Volunteer')}
-        >
-          <Text style={[styles.userTypeText, userType === 'Volunteer' && styles.activeText]}>
-            Volunteer
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.userTypeButton, userType === 'Management' && styles.activeButton]}
-          onPress={() => setUserType('Management')}
-        >
-          <Text style={[styles.userTypeText, userType === 'Management' && styles.activeText]}>
-            Management
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.userTypeButton, userType === 'Athlete' && styles.activeButton]}
-          onPress={() => setUserType('Athlete')}
-        >
-          <Text style={[styles.userTypeText, userType === 'Athlete' && styles.activeText]}>
-            Athlete
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -116,6 +90,15 @@ const ManagementRegistration = () => {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        placeholderTextColor="#888"
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
       />
 
       <TextInput
