@@ -36,7 +36,7 @@ const VolunteerLogin = () => {
         <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
-      <Text style={styles.title}>Volunteer Login</Text>
+      <Text style={styles.title}>Guide Login</Text>
 
       <TextInput
         style={styles.input}
