@@ -45,7 +45,9 @@ const ShowEnquiry = () => {
                         <View key={enquiry.id} style={styles.enquiryContainer}>
                             <Text style={styles.enquiryText}>{enquiry.text}</Text>
                             <Text style={styles.enquiryDate}>
-                                {new Date(enquiry.createdAt?.seconds * 1000).toLocaleString()}
+                                {enquiry.createdAt && enquiry.createdAt.seconds
+                                    ? new Date(enquiry.createdAt.seconds * 1000).toLocaleString()
+                                    : "Date not available"}
                             </Text>
                         </View>
                     ))}
