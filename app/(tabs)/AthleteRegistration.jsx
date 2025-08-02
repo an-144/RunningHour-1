@@ -56,53 +56,10 @@ const AthleteRegistration = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>Running Hour</Text> {/* Changed from SCDC SMART */}
+        <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
       <Text style={styles.title}>User Registration</Text>
-
-      <Text style={styles.label}>Select User Type:</Text>
-      <View style={styles.userTypeContainer}>
-        <TouchableOpacity
-          style={[styles.userTypeButton, userType === 'Volunteer' && styles.activeButton]}
-          onPress={() => setUserType('Volunteer')}
-        >
-          <Text
-            style={[
-              styles.userTypeText,
-              userType === 'Volunteer' && styles.activeTextColor,
-            ]}
-          >
-            Volunteer
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.userTypeButton, userType === 'Management' && styles.activeButton]}
-          onPress={() => setUserType('Management')}
-        >
-          <Text
-            style={[
-              styles.userTypeText,
-              userType === 'Management' && styles.activeTextColor,
-            ]}
-          >
-            Management
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.userTypeButton, userType === 'Athlete' && styles.activeButton]}
-          onPress={() => setUserType('Athlete')}
-        >
-          <Text
-            style={[
-              styles.userTypeText,
-              userType === 'Athlete' && styles.activeTextColor,
-            ]}
-          >
-            Athlete
-          </Text>
-        </TouchableOpacity>
-      </View>
 
       <TextInput
         style={styles.input}
