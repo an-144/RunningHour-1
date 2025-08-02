@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
+  Alert,
   Image,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { auth, usersRef } from '../../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 const ManagementRegistration = () => {
   const navigation = useNavigation();
@@ -25,7 +24,6 @@ const ManagementRegistration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [sdscteam, setSdscteam] = useState('');
-  const [nearestMTR, setNearestMTR] = useState('');
   const [userType, setUserType] = useState('Management'); // Default user type
 
   useEffect(() => {
@@ -37,7 +35,7 @@ const ManagementRegistration = () => {
   // Form submission handler
   const handleSubmit = async () => {
     try {
-      if (!name.trim() || !email.trim() || !password.trim() || !sdscteam.trim() || !nearestMTR.trim()) {
+      if (!name.trim() || !email.trim() || !password.trim() || !sdscteam.trim()) {
         Alert.alert('Validation Error', 'Please fill in all fields.');
         return;
       }
@@ -52,7 +50,6 @@ const ManagementRegistration = () => {
         name,
         email,
         sdscteam,
-        nearestMTR,
         userType, // Save user type in Firestore
       };
 
@@ -71,7 +68,7 @@ const ManagementRegistration = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
         <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>SCDC SMART</Text>
+        <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
       <Text style={styles.title}>Management Registration</Text>
@@ -136,14 +133,6 @@ const ManagementRegistration = () => {
         placeholderTextColor="#888"
         value={sdscteam}
         onChangeText={setSdscteam}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Nearest MTR Station"
-        placeholderTextColor="#888"
-        value={nearestMTR}
-        onChangeText={setNearestMTR}
       />
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
