@@ -19,12 +19,12 @@ const Login = () => {
 
       {/* Buttons */}
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('VolunteerLogin')}>
-        <Text style={styles.buttonText}>Buddy</Text>
+        <Text style={styles.buttonText}>Guide</Text>
         <Icon name="account-heart" size={24} color="#19235E" style={styles.icon} />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AthleteLogin')}>
-        <Text style={styles.buttonText}>Athlete</Text>
+        <Text style={styles.buttonText}>Buddy</Text>
         <View style={styles.iconGroup}>
           <Icon name="trophy-award" size={24} color="#19235E" style={styles.icon} />
           <Icon name="wheelchair-accessibility" size={24} color="#19235E" style={styles.icon} />

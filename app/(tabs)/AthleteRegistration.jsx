@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
+  Alert,
   Image,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { auth, usersRef } from '../../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 const AthleteRegistration = () => {
   const navigation = useNavigation();
@@ -33,36 +33,27 @@ const AthleteRegistration = () => {
       navigation.replace('AthleteDashboard');
     }
   }, [user]);
-
-  // Form submission handler
   const handleSubmit = async () => {
+    if (!name || !email || !password || !sport || !nearestMTR) {
+      Alert.alert('Error', 'Please fill in all required fields.');
+      return;
+    }
     try {
-      // Create user with Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // User data to store in Firestore
-      const userData = {
-        uid: user.uid,
+      await setDoc(doc(usersRef, userCredential.user.uid), {
         name,
         email,
         sport,
         additionalSports,
         nearestMTR,
-        userType, // Save user type in Firestore
-      };
-
-      // Add user data to Firestore
-      await setDoc(doc(usersRef, user.uid), userData);
-
-      Alert.alert('Success', 'Registration submitted successfully!');
-      navigation.navigate(`${userType}Dashboard`); // Navigate to the appropriate dashboard
+        userType,
+      });
+      Alert.alert('Success', 'Registration successful!');
+      navigation.replace('AthleteDashboard');
     } catch (error) {
-      Alert.alert('Error', error.message);
-      console.log(error);
+      Alert.alert('Registration Failed', error.message);
     }
   };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
