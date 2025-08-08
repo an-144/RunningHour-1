@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { addDoc, collection, getDocs, serverTimestamp } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
   TextInput,
-  ActivityIndicator,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
-import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import Legend from './Legend'; // Import the Legend component
 
@@ -135,12 +135,28 @@ const UpcomingSessions = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>SCDC SMART</Text>
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.logo}
+          accessibilityLabel="Running Hour logo"
+        />
+        <Text
+          style={styles.headerText}
+          accessibilityLabel="SCDC SMART header"
+          accessibilityRole="header"
+        >
+          SCDC SMART
+        </Text>
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Upcoming Sessions</Text>
+      <Text
+        style={styles.title}
+        accessibilityLabel="Upcoming Sessions"
+        accessibilityRole="header"
+      >
+        Upcoming Sessions
+      </Text>
 
       {/* Loading Indicator */}
       {isLoading && <ActivityIndicator size="large" color="#19235E" />}
@@ -163,15 +179,28 @@ const UpcomingSessions = () => {
           monthTextColor: '#19235E',
           textDisabledColor: '#d9e1e8',
         }}
+        accessibilityLabel="Calendar showing upcoming sessions. Select a date to add or view a session."
+        accessibilityRole="adjustable"
       />
 
       {/* Legend */}
-      <Legend sessionTypes={SESSION_TYPES} sessionColors={SESSION_COLORS} />
+      <Legend
+        sessionTypes={SESSION_TYPES}
+        sessionColors={SESSION_COLORS}
+        accessibilityLabel="Legend for session types and colors."
+        accessibilityRole="summary"
+      />
 
       {/* Modal for session type selection */}
       <Modal isVisible={isModalVisible}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Select Session Type</Text>
+        <View style={styles.modalContent} accessibilityLabel="Session type selection modal">
+          <Text
+            style={styles.modalTitle}
+            accessibilityLabel="Select Session Type"
+            accessibilityRole="header"
+          >
+            Select Session Type
+          </Text>
 
           {/* Session Type Buttons */}
           {SESSION_TYPES.map((session) => (
@@ -183,15 +212,27 @@ const UpcomingSessions = () => {
                 { backgroundColor: SESSION_COLORS[session.value] },
               ]}
               onPress={() => handleSessionTypeSelect(session.value)}
+              accessibilityLabel={`Session type: ${session.label}`}
+              accessibilityRole="button"
             >
-              <Text style={styles.sessionTypeButtonText}>{session.label}</Text>
+              <Text
+                style={styles.sessionTypeButtonText}
+                accessibilityLabel={`Session type option: ${session.label}`}
+              >
+                {session.label}
+              </Text>
             </TouchableOpacity>
           ))}
 
           {/* Description Input */}
           {selectedSessionType && (
             <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionLabel}>Description:</Text>
+              <Text
+                style={styles.descriptionLabel}
+                accessibilityLabel="Description"
+              >
+                Description:
+              </Text>
               <TextInput
                 style={styles.descriptionInput}
                 placeholder="Add a description..."
@@ -199,6 +240,7 @@ const UpcomingSessions = () => {
                 value={description}
                 onChangeText={setDescription}
                 multiline
+                accessibilityLabel="Enter session description"
               />
             </View>
           )}
@@ -209,19 +251,27 @@ const UpcomingSessions = () => {
               style={styles.saveButton}
               onPress={handleSaveSession}
               disabled={isLoading}
+              accessibilityLabel="Save session"
+              accessibilityRole="button"
             >
               {isLoading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color="#fff" accessibilityLabel="Saving session, please wait." />
               ) : (
-                <Text style={styles.saveButtonText}>Save</Text>
+                <Text style={styles.saveButtonText} accessibilityLabel="Save">
+                  Save
+                </Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={() => setModalVisible(false)}
               disabled={isLoading}
+              accessibilityLabel="Cancel session creation"
+              accessibilityRole="button"
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.cancelButtonText} accessibilityLabel="Cancel">
+                Cancel
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
