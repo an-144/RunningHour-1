@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { deleteObject, ref } from 'firebase/storage';
+import { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
+  ActivityIndicator,
+  Alert,
   FlatList,
   Image,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db, storage } from '../../config/firebase';
-import { ref, deleteObject } from 'firebase/storage';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const ManageLocations = () => {
   const [locations, setLocations] = useState([]);
@@ -87,23 +85,53 @@ const ManageLocations = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Manage Event Locations</Text>
+      <Text
+        style={styles.title}
+        accessibilityLabel="Manage Event Locations"
+        accessibilityRole="header"
+      >
+        Manage Event Locations
+      </Text>
       <FlatList
         data={locations}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Image source={{ uri: item.imageUrl }} style={styles.image} />
+          <View
+            style={styles.card}
+            accessibilityLabel={`Event location card for ${item.locationName}. Description: ${item.description}`}
+            accessibilityRole="summary"
+          >
+            <Image
+              source={{ uri: item.imageUrl }}
+              style={styles.image}
+              accessibilityLabel={`Image of ${item.locationName}`}
+            />
             <View style={styles.info}>
-              <Text style={styles.locationName}>{item.locationName}</Text>
-              <Text style={styles.description}>{item.description}</Text>
-              {/* <TouchableOpacity
+              <Text
+                style={styles.locationName}
+                accessibilityLabel={`Location name: ${item.locationName}`}
+              >
+                {item.locationName}
+              </Text>
+              <Text
+                style={styles.description}
+                accessibilityLabel={`Description: ${item.description}`}
+              >
+                {item.description}
+              </Text>
+              {/* Uncomment to enable delete button with accessibility features
+              <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => handleDelete(item.id, item.imageUrl)}
+                accessibilityLabel={`Delete ${item.locationName} location`}
+                accessibilityRole="button"
               >
-                <Icon name="trash-bin" size={20} color="#fff" />
-                <Text style={styles.deleteText}>Delete</Text>
-              </TouchableOpacity> */}
+                <Icon name="trash-bin" size={20} color="#fff" accessibilityLabel="Trash bin icon" />
+                <Text style={styles.deleteText} accessibilityLabel="Delete">
+                  Delete
+                </Text>
+              </TouchableOpacity>
+              */}
             </View>
           </View>
         )}
