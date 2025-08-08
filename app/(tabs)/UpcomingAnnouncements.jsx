@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
-import { db } from '../../config/firebase'; // Adjust the import path according to your project structure
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Import the Icon component
+import { db } from '../../config/firebase'; // Adjust the import path according to your project structure
 
 const UpcomingAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -76,30 +76,69 @@ const UpcomingAnnouncements = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Weekly Activities</Text>
+            <Text
+                style={styles.title}
+                accessibilityLabel="Weekly Activities"
+                accessibilityRole="header"
+            >
+                Weekly Activities
+            </Text>
             {announcements.length === 0 ? (
-                <Text style={styles.noAnnouncementsText}>No announcements available.</Text>
+                <Text
+                    style={styles.noAnnouncementsText}
+                    accessibilityLabel="No announcements available."
+                >
+                    No announcements available.
+                </Text>
             ) : (
                 <FlatList
                     data={announcements}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
-                        <View style={styles.announcementContainer}>
-                            <Text style={styles.announcementText}>{item.text}</Text>
-                            <Text style={styles.dateText}>{item.createdAt.toDate().toLocaleString()}</Text>
+                        <View
+                            style={styles.announcementContainer}
+                            accessibilityLabel={`Announcement: ${item.text}. Date: ${item.createdAt.toDate().toLocaleString()}`}
+                            accessibilityRole="text"
+                        >
+                            <Text
+                                style={styles.announcementText}
+                                accessibilityLabel={`Announcement text: ${item.text}`}
+                            >
+                                {item.text}
+                            </Text>
+                            <Text
+                                style={styles.dateText}
+                                accessibilityLabel={`Announcement date: ${item.createdAt.toDate().toLocaleString()}`}
+                            >
+                                {item.createdAt.toDate().toLocaleString()}
+                            </Text>
                             <View style={styles.actionsContainer}>
-                                <TouchableOpacity onPress={() => handleThumbsUp(item.id, item.likes || [])}>
-                                    <Icon 
-                                        name={item.likes?.includes('currentUserId') ? "thumbs-up" : "thumbs-up-outline"} 
-                                        size={24} 
-                                        color="#19235E" 
+                                <TouchableOpacity
+                                    onPress={() => handleThumbsUp(item.id, item.likes || [])}
+                                    accessibilityLabel={item.likes?.includes('currentUserId')
+                                        ? "Remove thumbs up from this announcement"
+                                        : "Give thumbs up to this announcement"}
+                                    accessibilityRole="button"
+                                >
+                                    <Icon
+                                        name={item.likes?.includes('currentUserId') ? "thumbs-up" : "thumbs-up-outline"}
+                                        size={24}
+                                        color="#19235E"
+                                        accessibilityLabel="Thumbs up icon"
                                     />
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleBookmark(item.id, item.bookmarks || [])}>
-                                    <Icon 
-                                        name={item.bookmarks?.includes('currentUserId') ? "bookmark" : "bookmark-outline"} 
-                                        size={24} 
-                                        color="#19235E" 
+                                <TouchableOpacity
+                                    onPress={() => handleBookmark(item.id, item.bookmarks || [])}
+                                    accessibilityLabel={item.bookmarks?.includes('currentUserId')
+                                        ? "Remove bookmark from this announcement"
+                                        : "Bookmark this announcement"}
+                                    accessibilityRole="button"
+                                >
+                                    <Icon
+                                        name={item.bookmarks?.includes('currentUserId') ? "bookmark" : "bookmark-outline"}
+                                        size={24}
+                                        color="#19235E"
+                                        accessibilityLabel="Bookmark icon"
                                     />
                                 </TouchableOpacity>
                             </View>
