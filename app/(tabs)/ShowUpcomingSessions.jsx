@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import Modal from 'react-native-modal';
-import {
-  collection,
-  getDocs,
   addDoc,
+  collection,
+  deleteDoc,
   doc,
   getDoc,
-  deleteDoc,
+  getDocs,
   query,
   where,
 } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import Modal from 'react-native-modal';
 import { db } from '../../config/firebase';
 import Legend from './Legend';
 
@@ -186,13 +186,35 @@ const ShowUpcomingSessions = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>Running Hour</Text>
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.logo}
+          accessibilityLabel="Running Hour logo"
+        />
+        <Text
+          style={styles.headerText}
+          accessibilityLabel="Running Hour header"
+          accessibilityRole="header"
+        >
+          Running Hour
+        </Text>
       </View>
 
-      <Text style={styles.title}>Upcoming Activities</Text>
+      <Text
+        style={styles.title}
+        accessibilityLabel="Upcoming Activities"
+        accessibilityRole="header"
+      >
+        Upcoming Activities
+      </Text>
 
-      {isLoading && <ActivityIndicator size="large" color="#19235E" />}
+      {isLoading && (
+        <ActivityIndicator
+          size="large"
+          color="#19235E"
+          accessibilityLabel="Loading upcoming activities"
+        />
+      )}
 
       <Calendar
         onDayPress={onDayPress}
@@ -211,23 +233,44 @@ const ShowUpcomingSessions = () => {
           monthTextColor: '#19235E',
           textDisabledColor: '#d9e1e8',
         }}
+        accessibilityLabel="Calendar showing upcoming activities. Select a date to view session details."
+        accessibilityRole="adjustable"
       />
 
-      <Legend sessionTypes={SESSION_TYPES} sessionColors={SESSION_COLORS} />
+      <Legend
+        sessionTypes={SESSION_TYPES}
+        sessionColors={SESSION_COLORS}
+        accessibilityLabel="Legend for session types and colors."
+        accessibilityRole="summary"
+      />
 
       <Modal isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Session Details</Text>
+        <View style={styles.modalContent} accessibilityLabel="Session details modal">
+          <Text
+            style={styles.modalTitle}
+            accessibilityLabel="Session Details"
+            accessibilityRole="header"
+          >
+            Session Details
+          </Text>
 
           {selectedSession ? (
             <>
-              <Text style={styles.sessionType}>Type: {selectedSession.sessionType}</Text>
-              <Text style={styles.sessionDescription}>
+              <Text
+                style={styles.sessionType}
+                accessibilityLabel={`Session type: ${selectedSession.sessionType}`}
+              >
+                Type: {selectedSession.sessionType}
+              </Text>
+              <Text
+                style={styles.sessionDescription}
+                accessibilityLabel={`Session description: ${selectedSession.description || 'No description provided'}`}
+              >
                 Description: {selectedSession.description || 'No description provided'}
               </Text>
             </>
           ) : (
-            <Text>No session data available</Text>
+            <Text accessibilityLabel="No session data available">No session data available</Text>
           )}
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
@@ -235,23 +278,35 @@ const ShowUpcomingSessions = () => {
               <TouchableOpacity
                 style={[styles.closeButton, { backgroundColor: '#e74c3c', flex: 1, marginRight: 10 }]}
                 onPress={cancelBooking}
+                accessibilityLabel="Cancel your booking for this session"
+                accessibilityRole="button"
               >
-                <Text style={styles.closeButtonText}>Cancel Booking</Text>
+                <Text style={styles.closeButtonText} accessibilityLabel="Cancel Booking">
+                  Cancel Booking
+                </Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={[styles.closeButton, { backgroundColor: '#19235E', flex: 1, marginRight: 10 }]}
                 onPress={bookSession}
+                accessibilityLabel="Book this session"
+                accessibilityRole="button"
               >
-                <Text style={styles.closeButtonText}>Book Now</Text>
+                <Text style={styles.closeButtonText} accessibilityLabel="Book Now">
+                  Book Now
+                </Text>
               </TouchableOpacity>
             )}
 
             <TouchableOpacity
               style={[styles.closeButton, { backgroundColor: '#aaa', flex: 1 }]}
               onPress={() => setModalVisible(false)}
+              accessibilityLabel="Close session details modal"
+              accessibilityRole="button"
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.closeButtonText} accessibilityLabel="Close">
+                Close
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
