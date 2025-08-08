@@ -14,16 +14,41 @@ const AthleteDashboard = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-        <Text style={styles.headerText}>RunningHour</Text>
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.logo}
+          accessibilityLabel="Running Hour logo"
+        />
+        <Text
+          style={styles.headerText}
+          accessibilityLabel="Running Hour"
+          accessibilityRole="header"
+        >
+          RunningHour
+        </Text>
       </View>
 
-      {/* Optionally, display phone number below the header: */}
-      <Text style={styles.infoText}>Email: {userEmail || 'Not available'}</Text>
-      <Text style={styles.infoText}>Phone: {phone || 'Not available'}</Text>
+      <Text
+        style={styles.infoText}
+        accessibilityLabel={`Email: ${userEmail || 'Not available'}`}
+      >
+        Email: {userEmail || 'Not available'}
+      </Text>
+      <Text
+        style={styles.infoText}
+        accessibilityLabel={`Phone: ${phone || 'Not available'}`}
+      >
+        Phone: {phone || 'Not available'}
+      </Text>
 
       {/* Title */}
-      <Text style={styles.title}>Guide Dashboard</Text>
+      <Text
+        style={styles.title}
+        accessibilityLabel="Guide Dashboard"
+        accessibilityRole="header"
+      >
+        Guide Dashboard
+      </Text>
 
       {/* Buttons */}
       <View style={styles.buttonContainer}>
@@ -31,44 +56,56 @@ const AthleteDashboard = () => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('ShowUpcomingSessions')}
-          accessibilityLabel="Upcoming Sessions and Tournaments Button"
-          accessibilityHint="Navigate to view upcoming sessions and tournaments"
+          accessibilityLabel="Upcoming Sessions and Tournaments. Navigate to view upcoming sessions and tournaments."
+          accessibilityHint="Shows upcoming sessions and tournaments."
+          accessibilityRole="button"
         >
-          <Ionicons name="calendar-outline" size={30} color="#fff" />
-          <Text style={styles.buttonText}>Upcoming Sessions/Tournaments</Text>
+          <Ionicons name="calendar-outline" size={30} color="#fff" accessibilityLabel="Calendar icon" />
+          <Text style={styles.buttonText} accessibilityLabel="Upcoming Sessions and Tournaments">
+            Upcoming Sessions/Tournaments
+          </Text>
         </TouchableOpacity>
 
         {/* Transportation Enquiries Button */}
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('UpdateEnquiry')}
-          accessibilityLabel="Transportation Enquiries Button"
-          accessibilityHint="Navigate to submit transportation enquiries"
+          accessibilityLabel="Transportation Enquiries. Navigate to submit transportation enquiries."
+          accessibilityHint="Submit transportation enquiries."
+          accessibilityRole="button"
         >
-          <Ionicons name="bus-outline" size={30} color="#fff" />
-          <Text style={styles.buttonText}>Transportation Enquiries</Text>
+          <Ionicons name="bus-outline" size={30} color="#fff" accessibilityLabel="Bus icon" />
+          <Text style={styles.buttonText} accessibilityLabel="Transportation Enquiries">
+            Transportation Enquiries
+          </Text>
         </TouchableOpacity>
 
         {/* Upcoming Announcements Button */}
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('UpcomingAnnouncements')}
-          accessibilityLabel="Upcoming Announcements Button"
-          accessibilityHint="Navigate to view upcoming announcements"
+          accessibilityLabel="Upcoming Announcements. Navigate to view upcoming announcements."
+          accessibilityHint="Shows upcoming announcements."
+          accessibilityRole="button"
         >
-          <Ionicons name="megaphone-outline" size={30} color="#fff" />
-          <Text style={styles.buttonText}>Upcoming Announcements</Text>
+          <Ionicons name="megaphone-outline" size={30} color="#fff" accessibilityLabel="Megaphone icon" />
+          <Text style={styles.buttonText} accessibilityLabel="Upcoming Announcements">
+            Upcoming Announcements
+          </Text>
         </TouchableOpacity>
 
         {/* Videos on Sports Button */}
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('SelectSport')}
-          accessibilityLabel="Videos on Sports Button"
-          accessibilityHint="Navigate to view sports-related videos"
+          accessibilityLabel="Videos on Sports. Navigate to view sports-related videos."
+          accessibilityHint="Shows sports-related videos."
+          accessibilityRole="button"
         >
-          <Ionicons name="videocam-outline" size={30} color="#fff" />
-          <Text style={styles.buttonText}>Videos on Sports</Text>
+          <Ionicons name="videocam-outline" size={30} color="#fff" accessibilityLabel="Video camera icon" />
+          <Text style={styles.buttonText} accessibilityLabel="Videos on Sports">
+            Videos on Sports
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
