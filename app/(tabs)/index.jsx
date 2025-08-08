@@ -1,15 +1,17 @@
+import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { auth, usersRef } from '../../config/firebase';
 
 const RegistrationScreen = () => {
   const navigation = useNavigation();
   const [user, loading, error] = useAuthState(auth);
+  const [specialNeeds, setSpecialNeeds] = useState('');
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     const navigateToDashboard = async () => {
@@ -40,6 +42,24 @@ const RegistrationScreen = () => {
     }
   };
 
+  // Handle first dropdown selection
+  const handleSpecialNeedsChange = (value) => {
+    setSpecialNeeds(value);
+    if (value === 'yes') {
+      navigation.replace('AthleteLogin');
+    }
+  };
+
+  // Handle second dropdown selection
+  const handleRoleChange = (value) => {
+    setRole(value);
+    if (value === 'management') {
+      navigation.replace('ManagementLogin');
+    } else if (value === 'guide') {
+      navigation.replace('VolunteerLogin');
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Header with Logo and Text */}
@@ -51,24 +71,37 @@ const RegistrationScreen = () => {
       {/* Title */}
       <Text style={styles.title}>Registration</Text>
 
-      {/* Buttons */}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('VolunteerRegistration')}>
-        <Text style={styles.buttonText}>Guide</Text>
-        <Icon name="account-heart" size={24} color="#19235E" style={styles.icon} />
-      </TouchableOpacity>
+      {/* Special Needs Dropdown */}
+      <Text style={styles.question}>Are you a person with special needs?</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={specialNeeds}
+          onValueChange={handleSpecialNeedsChange}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select an option..." value="" />
+          <Picker.Item label="Yes" value="yes" />
+          <Picker.Item label="No" value="no" />
+        </Picker>
+      </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AthleteRegistration')}>
-        <Text style={styles.buttonText}>Buddy</Text>
-        <View style={styles.iconGroup}>
-          <Icon name="trophy-award" size={24} color="#19235E" style={styles.icon} />
-          <Icon name="wheelchair-accessibility" size={24} color="#19235E" style={styles.icon} />
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ManagementRegistration')}>
-        <Text style={styles.buttonText}>Management</Text>
-        <Icon name="account-group" size={24} color="#19235E" style={styles.icon} />
-      </TouchableOpacity>
+      {specialNeeds === 'no' && (
+        /* Role Dropdown - Shown only if 'No' is selected in Special Needs */
+        <>
+          <Text style={styles.question}>Are you management or a guide?</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={role}
+              onValueChange={handleRoleChange}
+              style={styles.picker}
+            >
+              <Picker.Item label="Select an option..." value="" />
+              <Picker.Item label="Management" value="management" />
+              <Picker.Item label="Guide" value="guide" />
+            </Picker>
+          </View>
+        </>
+      )}
 
       {/* Sign in as a different user */}
       <TouchableOpacity onPress={handleLogout} style={styles.differentUserContainer}>
@@ -123,6 +156,25 @@ const styles = StyleSheet.create({
     color: '#19235E',
     marginBottom: 40,
     marginTop: 40,
+  },
+  question: {
+    fontSize: 18,
+    color: '#19235E',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  pickerContainer: {
+    width: '80%',
+    marginBottom: 30,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#19235E',
+    overflow: 'hidden',
+  },
+  picker: {
+    width: '100%',
+    height: 50,
   },
   button: {
     flexDirection: 'row',
