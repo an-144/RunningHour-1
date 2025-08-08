@@ -1,7 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const ManagementDashboard = () => {
   const navigation = useNavigation();
@@ -54,25 +53,17 @@ const ManagementDashboard = () => {
           <Ionicons name="location-outline" size={30} color="#fff" />
           <Text style={styles.buttonText}>Manage Event Locations</Text>
         </TouchableOpacity>
+
+        {/* View Bookings Button */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('ManageLocations')}
-          accessibilityLabel="Manage event locations"
-          accessibilityHint="Allows you to view and delete event locations"
+          onPress={() => navigation.navigate('ViewBookings')}
+          accessibilityLabel="View bookings"
+          accessibilityHint="Allows you to view all volunteer bookings"
         >
-          <Ionicons name="location-outline" size={30} color="#fff" />
-          <Text style={styles.buttonText}>Manage Event Locations</Text>
+          <Ionicons name="book-outline" size={30} color="#fff" />
+          <Text style={styles.buttonText}>View Bookings</Text>
         </TouchableOpacity>
-        {/* View Bookings Button */}
-<TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate('ViewBookings')}
-  accessibilityLabel="View bookings"
-  accessibilityHint="Allows you to view all volunteer bookings"
->
-  <Ionicons name="book-outline" size={30} color="#fff" />
-  <Text style={styles.buttonText}>View Bookings</Text>
-</TouchableOpacity>
       </View>
     </SafeAreaView>
   );
