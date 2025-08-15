@@ -1,6 +1,7 @@
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import {
   Alert,
@@ -12,14 +13,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { auth } from '../../config/firebase';
+import { auth, usersRef } from '../../config/firebase';
 
-const AthleteLogin = () => {
+const AthleteRegistration = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // New states for registration questions
+  // Registration questions
   const [fullName, setFullName] = useState('');
   const [gender, setGender] = useState('');
   const [membershipNumber, setMembershipNumber] = useState('');
@@ -30,13 +31,41 @@ const AthleteLogin = () => {
   const [trainingPreference, setTrainingPreference] = useState('');
   const [remarks, setRemarks] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
+    if (
+      !fullName ||
+      !gender ||
+      !membershipNumber ||
+      !ageGroup ||
+      !race ||
+      !contactNumber ||
+      !role ||
+      !trainingPreference ||
+      !email ||
+      !password
+    ) {
+      Alert.alert('Error', 'Please fill in all required fields.');
+      return;
+    }
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Success', 'Logged in successfully!');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await setDoc(doc(usersRef, userCredential.user.uid), {
+        fullName,
+        gender,
+        membershipNumber,
+        ageGroup,
+        race,
+        contactNumber,
+        role,
+        trainingPreference,
+        remarks,
+        email,
+        userType: 'Athlete',
+      });
+      Alert.alert('Success', 'Registration successful!');
       navigation.replace('AthleteDashboard');
     } catch (error) {
-      Alert.alert('Login Failed', error.message);
+      Alert.alert('Registration Failed', error.message);
     }
   };
 
@@ -47,7 +76,7 @@ const AthleteLogin = () => {
         <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
-      <Text style={styles.title}>Buddy Login</Text>
+      <Text style={styles.title}>Buddy Registration</Text>
 
       {/* Full Name */}
       <Text style={styles.label}>Full Name</Text>
@@ -172,7 +201,7 @@ const AthleteLogin = () => {
         onChangeText={setRemarks}
       />
 
-      {/* Login Section */}
+      {/* Registration Section */}
       <TextInput
         style={styles.input}
         placeholder="Email Address"
@@ -191,15 +220,15 @@ const AthleteLogin = () => {
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
+        <Text style={styles.loginButtonText}>Register</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.registerButton}
-        onPress={() => navigation.navigate('AthleteRegistration')}
+        onPress={() => navigation.navigate('AthleteLogin')}
       >
-        <Text style={styles.registerButtonText}>Don't have an account? Register</Text>
+        <Text style={styles.registerButtonText}>Already have an account? Login</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -285,4 +314,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AthleteLogin;
+export default AthleteRegistration;
