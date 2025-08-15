@@ -1,14 +1,10 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
-import * as Location from 'expo-location';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 import {
   Alert,
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,88 +12,31 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { auth, usersRef } from '../../config/firebase';
+import { auth } from '../../config/firebase';
 
-const VolunteerRegistration = () => {
+const VolunteerLogin = () => {
   const navigation = useNavigation();
-
-  // State for form inputs
-  const [user] = useAuthState(auth);
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [location, setLocation] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [userType, setUserType] = useState('Volunteer');
-  const [phone, setPhone] = useState(''); // Add phone state
 
-  useEffect(() => {
-    if (user) {
-      navigation.replace(`${userType}Dashboard`);
-    }
-  }, [user]);
+  // Registration questions
+  const [fullName, setFullName] = useState('');
+  const [gender, setGender] = useState('');
+  const [membershipNumber, setMembershipNumber] = useState('');
+  const [ageGroup, setAgeGroup] = useState('');
+  const [race, setRace] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [role, setRole] = useState('');
+  const [trainingPreference, setTrainingPreference] = useState('');
+  const [remarks, setRemarks] = useState('');
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || startDate;
-    setShowDatePicker(Platform.OS === 'ios');
-    setStartDate(currentDate);
-  };
-
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-  };
-
-  const fetchLocation = async () => {
+  const handleLogin = async () => {
     try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'Permission to access location was denied');
-        return;
-      }
-
-      let locationResult = await Location.getCurrentPositionAsync({});
-      const { latitude, longitude } = locationResult.coords;
-      let [address] = await Location.reverseGeocodeAsync({ latitude, longitude });
-      if (address) {
-        const formattedAddress = `${address.name || ''}, ${address.street || ''}, ${address.city || ''}, ${address.region || ''}, ${address.country || ''}`.trim();
-        setLocation(formattedAddress);
-      }
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert('Success', 'Logged in successfully!');
+      navigation.replace('VolunteerDashboard');
     } catch (error) {
-      Alert.alert('Error', 'Unable to fetch location. Please try again.');
-      console.log(error);
-    }
-  };
-
-  const handleSubmit = async () => {
-    try {
-      if (!name.trim() || !email.trim() || !password.trim() || !phone.trim()) { // Add phone to validation
-        Alert.alert('Validation Error', 'Please fill in all fields.');
-        return;
-      }
-
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      const userData = {
-        uid: user.uid,
-        name,
-        email,
-        phone, // Add phone to Firestore document
-        location,
-        startDate: startDate.toISOString(),
-        userType,
-      };
-
-      await setDoc(doc(usersRef, user.uid), userData);
-
-      Alert.alert('Success', 'Registration submitted successfully!');
-      navigation.navigate(`${userType}Dashboard`);
-    } catch (error) {
-      Alert.alert('Error', error.message);
-      console.log(error);
+      Alert.alert('Login Failed', error.message);
     }
   };
 
@@ -108,16 +47,132 @@ const VolunteerRegistration = () => {
         <Text style={styles.headerText}>Running Hour</Text>
       </View>
 
-      <Text style={styles.title}>Guide Registration</Text>
+      <Text style={styles.title}>Guide Login</Text>
 
+      {/* Full Name */}
+      <Text style={styles.label}>Full Name</Text>
       <TextInput
         style={styles.input}
-        placeholder="Name"
+        placeholder="Enter your full name"
         placeholderTextColor="#888"
-        value={name}
-        onChangeText={setName}
+        value={fullName}
+        onChangeText={setFullName}
       />
 
+      {/* Gender */}
+      <Text style={styles.label}>Select your gender</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={gender}
+          onValueChange={setGender}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select gender..." value="" />
+          <Picker.Item label="Male" value="Male" />
+          <Picker.Item label="Female" value="Female" />
+        </Picker>
+      </View>
+
+      {/* Membership Number */}
+      <Text style={styles.label}>Membership Number - New Guides/Buddies, please indicate 0.</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter membership number"
+        placeholderTextColor="#888"
+        value={membershipNumber}
+        onChangeText={setMembershipNumber}
+        keyboardType="numeric"
+      />
+
+      {/* Age Group */}
+      <Text style={styles.label}>Age Group</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={ageGroup}
+          onValueChange={setAgeGroup}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select age group..." value="" />
+          <Picker.Item label="Below 13" value="Below 13" />
+          <Picker.Item label="13 - 25" value="13 - 25" />
+          <Picker.Item label="26 - 49" value="26 - 49" />
+          <Picker.Item label="50 and above" value="50 and above" />
+        </Picker>
+      </View>
+
+      {/* Race */}
+      <Text style={styles.label}>Race</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={race}
+          onValueChange={setRace}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select race..." value="" />
+          <Picker.Item label="Chinese" value="Chinese" />
+          <Picker.Item label="Indian" value="Indian" />
+          <Picker.Item label="Malay" value="Malay" />
+          <Picker.Item label="Other" value="Other" />
+        </Picker>
+      </View>
+
+      {/* Contact Number */}
+      <Text style={styles.label}>Contact Number</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter contact number"
+        placeholderTextColor="#888"
+        value={contactNumber}
+        onChangeText={setContactNumber}
+        keyboardType="phone-pad"
+      />
+
+      {/* Role */}
+      <Text style={styles.label}>I am a ... (Indicate under "Remarks" if you are new to Runninghour)</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={role}
+          onValueChange={setRole}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select role..." value="" />
+          <Picker.Item label="Buddy with autism and/or an intellectual disability" value="Buddy with autism and/or an intellectual disability" />
+          <Picker.Item label="Buddy with a visual impairment" value="Buddy with a visual impairment" />
+          <Picker.Item label="Buddy with a hearing impairment" value="Buddy with a hearing impairment" />
+          <Picker.Item label="Buddy with other physical impairments" value="Buddy with other physical impairments" />
+          <Picker.Item label="Guide (Inducted)" value="Guide (Inducted)" />
+          <Picker.Item label="Guide (Not Inducted)" value="Guide (Not Inducted)" />
+          <Picker.Item label="Caregiver (attending but not guiding)" value="Caregiver (attending but not guiding)" />
+        </Picker>
+      </View>
+
+      {/* Training Preference */}
+      <Text style={styles.label}>Training preference (State under "Remarks" if there is any training goals set for the year i.e. complete 10km, half marathon, etc. with targeted timing)</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={trainingPreference}
+          onValueChange={setTrainingPreference}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select training preference..." value="" />
+          <Picker.Item label="Team A : Long Run (7KM - 8KM)" value="Team A : Long Run (7KM - 8KM)" />
+          <Picker.Item label="Team B : Medium Run (5KM - 7KM)" value="Team B : Medium Run (5KM - 7KM)" />
+          <Picker.Item label="Team C : Short Run (3KM - 5 KM)" value="Team C : Short Run (3KM - 5 KM)" />
+          <Picker.Item label="Team D : Walking" value="Team D : Walking" />
+        </Picker>
+      </View>
+
+      {/* Remarks */}
+      <Text style={styles.label}>Remarks</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter any remarks"
+        placeholderTextColor="#888"
+        value={remarks}
+        onChangeText={setRemarks}
+      />
+
+      {/* Login Section */}
       <TextInput
         style={styles.input}
         placeholder="Email Address"
@@ -136,62 +191,21 @@ const VolunteerRegistration = () => {
         secureTextEntry
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        placeholderTextColor="#888"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
-
-      <View style={styles.inputWithIcon}>
-        <TextInput
-          style={styles.inputField}
-          placeholder="Location of Volunteering"
-          placeholderTextColor="#888"
-          value={location}
-          onChangeText={setLocation}
-        />
-        <TouchableOpacity onPress={fetchLocation} style={styles.iconContainer}>
-          <Ionicons name="location-outline" size={24} color="#19235E" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.inputWithIcon}>
-        <TextInput
-          style={styles.inputField}
-          placeholder="When did you start volunteering?"
-          placeholderTextColor="#888"
-          value={startDate.toLocaleDateString()}
-          editable={false}
-        />
-        <TouchableOpacity onPress={showDatepicker} style={styles.iconContainer}>
-          <Icon name="calendar" size={24} color="#19235E" />
-        </TouchableOpacity>
-      </View>
-
-      {showDatePicker && (
-        <DateTimePicker
-          value={startDate}
-          mode="date"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          onChange={onChange}
-          maximumDate={new Date()}
-        />
-      )}
-
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back</Text>
+      <TouchableOpacity
+        style={styles.registerButton}
+        onPress={() => navigation.navigate('VolunteerRegistration')}
+      >
+        <Text style={styles.registerButtonText}>Don't have an account? Register</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -224,76 +238,52 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    marginBottom: 10,
     color: '#19235E',
-  },
-  userTypeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-  },
-  userTypeButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderWidth: 1,
-    borderColor: '#19235E',
-    borderRadius: 5,
-  },
-  activeButton: {
-    backgroundColor: '#19235E',
-  },
-  userTypeText: {
-    color: '#19235E',
-  },
-  activeText: {
-    color: '#FFF',
+    marginBottom: 5,
+    marginTop: 10,
   },
   input: {
-    height: 40,
-    borderColor: '#19235E',
+    height: 50,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 15,
-    backgroundColor: '#FFF',
+    color: '#000',
+    backgroundColor: '#fff',
   },
-  inputWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  inputField: {
-    flex: 1,
-    height: 40,
+  pickerContainer: {
     borderColor: '#19235E',
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    backgroundColor: '#FFF',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginBottom: 15,
+    overflow: 'hidden',
   },
-  iconContainer: {
-    marginLeft: 10,
+  picker: {
+    width: '100%',
+    height: 50,
   },
-  submitButton: {
+  loginButton: {
     backgroundColor: '#19235E',
-    paddingVertical: 10,
-    borderRadius: 5,
+    paddingVertical: 15,
+    borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 15,
   },
-  submitButtonText: {
-    color: '#FFF',
+  loginButtonText: {
+    color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
-  backButton: {
-    paddingVertical: 10,
+  registerButton: {
+    marginTop: 10,
     alignItems: 'center',
   },
-  backButtonText: {
+  registerButtonText: {
     color: '#19235E',
     fontSize: 16,
+    fontWeight: '600',
   },
 });
 
-export default VolunteerRegistration;
+export default VolunteerLogin;
