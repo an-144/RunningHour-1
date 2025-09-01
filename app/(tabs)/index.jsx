@@ -103,11 +103,6 @@ const RegistrationScreen = () => {
         </>
       )}
 
-      {/* Sign in as a different user */}
-      <TouchableOpacity onPress={handleLogout} style={styles.differentUserContainer}>
-        <Text style={styles.differentUserText}>Sign up as a different user</Text>
-      </TouchableOpacity>
-
       {/* Already have an account text */}
       <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginContainer}>
         <Text style={styles.loginText}>ALREADY HAVE AN ACCOUNT? </Text>
