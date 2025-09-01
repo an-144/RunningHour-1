@@ -46,7 +46,7 @@ const RegistrationScreen = () => {
   const handleSpecialNeedsChange = (value) => {
     setSpecialNeeds(value);
     if (value === 'yes') {
-      navigation.replace('AthleteLogin');
+      navigation.replace('AthleteRegistration');
     }
   };
 
@@ -54,9 +54,9 @@ const RegistrationScreen = () => {
   const handleRoleChange = (value) => {
     setRole(value);
     if (value === 'management') {
-      navigation.replace('ManagementLogin');
+      navigation.replace('ManagementRegistration');
     } else if (value === 'guide') {
-      navigation.replace('VolunteerLogin');
+      navigation.replace('VolunteerRegistration');
     }
   };
 
