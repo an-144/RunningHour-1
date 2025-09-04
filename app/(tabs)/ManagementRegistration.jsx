@@ -112,7 +112,7 @@ const ManagementRegistration = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="SDSC Team"
+        placeholder="RunningHour Team"
         placeholderTextColor="#888"
         value={sdscteam}
         onChangeText={setSdscteam}
